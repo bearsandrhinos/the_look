@@ -111,6 +111,7 @@ view: users {
     drill_fields: [zip, city]
   }
 
+
   dimension: zip {
     type: zipcode
     sql: ${TABLE}.zip ;;

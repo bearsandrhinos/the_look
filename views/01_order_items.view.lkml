@@ -3,6 +3,34 @@ view: order_items {
 
   ########## IDs, Foreign Keys, Counts ###########
 
+  parameter: main_metric_selector {
+    type: unquoted
+    allowed_value: {
+      label: "Total Revenue"
+      value: "total_revenue"
+    }
+    allowed_value: {
+      label: "Total Orders"
+      value: "total_orders"
+    }
+    allowed_value: {
+      label: "Average Revenue"
+      value: "average_revenue"
+    }
+  }
+
+  measure: dynamic_measure {
+    label_from_parameter: main_metric_selector
+    sql:
+    {% if main_metric_selector._parameter_value == 'total_revenue' %}
+      ${total_sale_price}
+      {% elsif main_metric_selector._parameter_value == 'total_orders' %}
+      ${order_count}
+    {% else %}
+      ${average_sale_price}
+    {% endif %};;
+  }
+
   dimension: id {
     primary_key: yes
     type: number
@@ -344,6 +372,8 @@ view: order_items {
     value_format_name: percent_2
     sql: 1.0 * ${returned_count} / nullif(${count},0) ;;
   }
+
+
 
 
 ########## Repeat Purchase Facts ##########
